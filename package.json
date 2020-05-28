@@ -1,0 +1,11 @@
+{
+  "name": "citacoes_pubmed",
+  "version": "1.0.0",
+  "description": "Robô para mapeamento das citações dos artigos pubmed",
+  "main": "start.js",
+  "author": "Lucas Matias",
+  "license": "MIT",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
