@@ -4,15 +4,10 @@ module.exports = (conn) => {
     fetchArticles
   }
 
-  function fetchArticles(callback) {
-
+  async function fetchArticles() {
     const query = 'SELECT id FROM artigos where incluido = 0 limit 30;';
-    conn.query(
-      query, 
-      (err, results, fields) => {
-        const rs = JSON.parse(JSON.stringify(results));
-        callback(rs.map(r => r.id));
-      }
-    );
+    const rows = await conn.query( query );
+    const rs = JSON.parse(JSON.stringify(rows));
+    return rs.map(r => r.id);
   }
 };

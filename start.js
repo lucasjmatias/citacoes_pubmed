@@ -1,8 +1,7 @@
 const conn = require('./conn');
-var parseString = require('xml2js').parseString;
+var xml2js = require('xml2js');
 const axios = require('axios').default;
 
-conn.connect();
 const persistUtils = require('./persist_utils')(conn);
 
 const baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils';
@@ -14,23 +13,15 @@ const pubmedUtil = axios.create({
   baseURL,
   responseType: 'text',
   timeout: 1000,
-})
-
-persistUtils.fetchArticles(articles => {
-  console.log(articles);
-  pubmedUtil.get(
-      utilParams + articles.reduce(concatId, '&id=')
-    )
-    .then( response => {
-      parseString(response.data, function (err, result) {
-        console.dir(result.eLinkResult.LinkSet.length);
-      });
-    });
 });
 
+(async() => {
 
+  const articles = await persistUtils.fetchArticles();
+  const response = await pubmedUtil.get( utilParams + articles.reduce(concatId, '&id=') );
+  const result = await xml2js.parseStringPromise( response.data );
+  console.log( result.eLinkResult.LinkSet );
 
-
-
-conn.end();
+  conn.close();
+})();
 // const articlesThaCiteTheGivenArticle;
