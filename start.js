@@ -21,6 +21,18 @@ const pubmedUtil = axios.create({
   const response = await pubmedUtil.get( utilParams + articles.reduce(concatId, '&id=') );
   const result = await xml2js.parseStringPromise( response.data );
   console.log( result.eLinkResult.LinkSet );
+  const mappedIds = result.eLinkResult.LinkSet
+    .map(
+      art => {
+        const idArticle = art.IdList[0].Id[0];
+        return art.LinkSetDb 
+                ? art.LinkSetDb[0].Link
+                    .map( link => [idArticle, link.Id[0]] )
+                : [];
+      } 
+    );
+  
+  console.log(mappedIds);
 
   conn.close();
 })();
