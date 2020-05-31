@@ -48,9 +48,9 @@ DROP TABLE IF EXISTS `citacoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `citacoes` (
-  `id_artigo` int(11) NOT NULL,
   `id_artigo_citado` int(11) NOT NULL,
-  PRIMARY KEY (`id_artigo`,`id_artigo_citado`)
+  `id_artigo_citante` int(11) NOT NULL,
+  PRIMARY KEY (`id_artigo_citado`,`id_artigo_citante`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
