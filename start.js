@@ -14,7 +14,7 @@ const concatId = (before, current) => `${before}&id=${current}`;
 const pubmedUtil = axios.create({
   baseURL,
   responseType: 'text',
-  timeout: 10000,
+  timeout: 30000,
 });
 
 (async() => {
@@ -46,8 +46,9 @@ const pubmedUtil = axios.create({
                     : [];
           } 
       ));
-      // console.log(mappedIds);
-      await persistUtils.insertCites(mappedIds)
+      if (mappedIds.length) {
+        await persistUtils.insertCites(mappedIds)
+      }
       await persistUtils.markAsDone(articles);
       await conn.commit();
       const dif = ((new Date()).getTime() - start.getTime()) / 1000; 
