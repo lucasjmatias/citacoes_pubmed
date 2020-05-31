@@ -14,7 +14,7 @@ const concatId = (before, current) => `${before}&id=${current}`;
 const pubmedUtil = axios.create({
   baseURL,
   responseType: 'text',
-  timeout: 1000,
+  timeout: 10000,
 });
 
 (async() => {
@@ -27,10 +27,10 @@ const pubmedUtil = axios.create({
   let nArticles = 0;
   do {
     
+    var start = new Date();
     const articles = await persistUtils.fetchArticles();
-    console.log(articles);
-    // nArticles = articles.length;
-    // if (nArticles === 0) { break; }
+    nArticles = articles.length;
+    if (nArticles === 0) { break; }
     await conn.beginTransaction();
     try {
       const response = await pubmedUtil.get( utilParams + articles.reduce(concatId, '&id=') );
@@ -50,7 +50,9 @@ const pubmedUtil = axios.create({
       await persistUtils.insertCites(mappedIds)
       await persistUtils.markAsDone(articles);
       await conn.commit();
-      console.log(`Requested: ${articles.length}, Found: ${foundArticles.length}`)
+      const dif = ((new Date()).getTime() - start.getTime()) / 1000; 
+      console.log(`Requested: ${articles.length}, Found: ${foundArticles.length}, In ${dif}s`)
+
     } catch (error) {
       console.error(error);
       await conn.rollback();
