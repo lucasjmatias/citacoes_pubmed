@@ -9,7 +9,7 @@
     "start": "node start.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "mysql": "^2.18.1",
     "prompt": "^1.0.0",
     "ramda": "^0.27.0",
